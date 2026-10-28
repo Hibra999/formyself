@@ -52,3 +52,18 @@ For local use, install the project with `pip install -e '.[backtest]'`. The
 repository's `.env` is ignored by Git. Set `FRED_API_KEY` there to use FRED,
 and use new private credentials for `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID`.
 Never commit credentials. The provided example is illustrative, not evidence.
+
+## Local model
+
+The local runtime and GGUF are not part of this repository. Set `SPARK_MODEL`
+to the GGUF path and start the CUDA build downloaded next to this repository:
+
+```powershell
+& '..\llama-cuda\llama-server.exe' -m $env:SPARK_MODEL --host 127.0.0.1 --port 8080 --ctx-size 32768 --n-gpu-layers 99 --parallel 1 --reasoning off
+```
+
+For TradingAgents, select provider `openai_compatible`, URL
+`http://127.0.0.1:8080/v1`, and model `Spark-X2.6-4B`. The server above has no
+authentication; use it only while needed and stop it after the test. A graph
+may still request more context or return invalid structured output. An aborted
+or malformed run must never be treated as a trading decision.
