@@ -71,6 +71,9 @@ def _apply_env_overrides(config: dict) -> dict:
             config[key] = _coerce(raw, config.get(key))
         except ValueError as exc:
             raise ValueError(f"Invalid value for {env_var}: {exc}") from exc
+    news_vendor = os.environ.get("TRADINGAGENTS_NEWS_VENDOR")
+    if news_vendor:
+        config["tool_vendors"].update({"get_news": news_vendor, "get_global_news": news_vendor})
     return config
 
 

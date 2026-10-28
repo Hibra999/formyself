@@ -78,6 +78,7 @@ def test_quantstats_receives_portfolio_returns(monkeypatch, tmp_path):
     assert calls[0][0][0] is result.returns
     assert calls[0][1]["output"] == str(path)
     assert calls[0][1]["periods_per_year"] == 365
+    assert "Sell/Underweight sell" in calls[0][1]["title"]
 
 
 def test_rejects_missing_days_in_crypto_prices():

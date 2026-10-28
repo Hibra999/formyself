@@ -114,5 +114,7 @@ def quantstats_html(result: PortfolioResult, output: str | Path) -> None:
         import quantstats as qs
     except ImportError as exc:
         raise ImportError("QuantStats is required: install the quantstats package") from exc
-    qs.reports.html(result.returns, output=str(output), title="Portfolio backtest",
+    qs.reports.html(result.returns, output=str(output),
+                    title=("Simulated portfolio: 1,000 USD; 10% position cap; 0.36% fee per side; "
+                           "next close; no slippage; Buy/Overweight buy, Sell/Underweight sell"),
                     periods_per_year=365)
