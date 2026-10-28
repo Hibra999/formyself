@@ -25,6 +25,7 @@ _ENV_OVERRIDES = {
     "TRADINGAGENTS_TEMPERATURE":          "temperature",
     "TRADINGAGENTS_LLM_MAX_RETRIES":      "llm_max_retries",
     "TRADINGAGENTS_MAX_TOKENS":           "max_tokens",
+    "TRADINGAGENTS_ALPACA_NEWS_SNAPSHOTS": "alpaca_persist_news_snapshots",
     # Provider-specific reasoning/thinking knobs (None = each provider's own
     # default). Settable here for non-interactive runs; the CLI also offers an
     # interactive choice, which is skipped when the matching var is set.
@@ -91,6 +92,7 @@ def build_default_config() -> dict:
         # the oldest resolved entries are pruned once this limit is exceeded.
         # Pending entries are never pruned. None disables rotation entirely.
         "memory_log_max_entries": None,
+        "alpaca_persist_news_snapshots": False,
         # LLM settings
         "llm_provider": "openai",
         "deep_think_llm": "gpt-6-sol",

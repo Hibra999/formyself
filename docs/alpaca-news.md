@@ -31,9 +31,12 @@ versions; withheld items are not proof that nothing occurred.
 
 `fetch_news(start_date, end_date, symbol=None)` returns the exact filtered
 snapshot, page-chain hashes and discard counts without credentials or cursor
-values. The analyst report prints a SHA256 hash of that snapshot, but the
-graph does not automatically persist it: callers must retain the exact snapshot
-used to verify that hash. A separate later fetch may differ. Alpaca supplies
+values. Set `TRADINGAGENTS_ALPACA_NEWS_SNAPSHOTS=true` to retain the exact
+snapshot used by each analyst under `results_dir/reports/alpaca_news_snapshots/`.
+The analyst report prints its SHA256. The snapshot is written atomically, its
+file name is the hash of its canonical JSON bytes, and it contains no API
+credentials or raw page cursors. Snapshot files contain third-party news and
+are ignored by Git. A separate later fetch may differ. Alpaca supplies
 Benzinga news, not an exhaustive archive of global events or historic Reddit,
 StockTwits, prediction markets or all exogenous variables. This adapter does not
 establish completeness or unlock the audited portfolio backtest.

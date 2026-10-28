@@ -7,6 +7,7 @@ from tradingagents.dataflows.errors import (
     VendorUnavailableError,
 )
 from tradingagents.dataflows.vendors.alpaca_news import (
+    AlpacaSnapshotError,
     get_global_news as get_alpaca_global_news,
     get_news as get_alpaca_news,
 )
@@ -240,6 +241,8 @@ def route_to_vendor(method: str, *args, **kwargs):
 
         try:
             return impl_func(*args, **kwargs)
+        except AlpacaSnapshotError:
+            raise
         except VendorUnavailableError as e:
             logger.warning("Vendor %r unavailable for %s: %s; trying next vendor.", vendor, method, e)
             # Kept so an all-unavailable chain can say the vendor was the
