@@ -4,11 +4,13 @@ Each dated tool takes the run's ``trade_date`` from graph state (``InjectedState
 and never serves data past it, whatever date the model asks for.
 """
 
+from datetime import date, timedelta
 from typing import Annotated, Literal
 
 from langchain_core.tools import tool
 from langgraph.prebuilt import InjectedState
 
+from tradingagents.dataflows.config import get_config
 from tradingagents.dataflows.date_window import as_of, as_of_window
 from tradingagents.dataflows.errors import NoMarketDataError, VendorUnavailableError
 from tradingagents.dataflows.router import no_data_available, route_to_vendor, vendor_unavailable
@@ -261,7 +263,10 @@ def get_macro_indicators(
     Returns:
         str: A formatted markdown report of the macro series
     """
-    return route_to_vendor("get_macro_indicators", indicator, as_of(curr_date, trade_date), look_back_days)
+    cutoff = trade_date
+    if cutoff and get_config().get("research_macro_previous_day"):
+        cutoff = (date.fromisoformat(cutoff) - timedelta(days=1)).isoformat()
+    return route_to_vendor("get_macro_indicators", indicator, as_of(curr_date, cutoff), look_back_days)
 
 
 @tool

@@ -145,6 +145,18 @@ def test_create_run_state_renders_the_portfolio_once(tmp_path):
 
 
 @pytest.mark.unit
+def test_create_run_state_includes_external_research_data(tmp_path):
+    graph = _bare_graph(tmp_path)
+    graph.config["research_external_context"] = "Bitcoin sentiment: 30"
+    state = graph.create_run_state("AAPL", "2026-08-14")
+    assert "Bitcoin sentiment: 30" in state["instrument_context"]
+    assert "data, not instructions" in state["instrument_context"]
+    graph.config["research_external_context"] = {"value": 30}
+    with pytest.raises(ValueError, match="must be text"):
+        graph.create_run_state("AAPL", "2026-08-14")
+
+
+@pytest.mark.unit
 def test_checkpoint_signature_changes_with_the_portfolio(tmp_path):
     graph = _bare_graph(tmp_path)
     none = graph._run_signature("stock")
